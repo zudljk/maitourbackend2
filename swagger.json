@@ -1,0 +1,967 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "2.0",
+    "title" : "maiTour backend",
+    "description" : ""
+  },
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/cxaddons/maitourbackend/2.0"
+  } ],
+  "paths" : {
+    "/codeLists" : {
+      "get" : {
+        "summary" : "Returns the necessary codelists",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "Accept-Language",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The lists and entries",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "object"
+                  },
+                  "example" : {
+                    "CustomerABCClassificationCode" : {
+                      "A" : "A",
+                      "B" : "B",
+                      "C" : "C"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{OrgID}/proposals" : {
+      "get" : {
+        "summary" : "Returns the proposals for the workbasket",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "OrgID",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "The login name of the user"
+        }, {
+          "in" : "query",
+          "name" : "tourstart",
+          "schema" : {
+            "type" : "integer"
+          },
+          "description" : "start timestamp"
+        }, {
+          "in" : "query",
+          "name" : "tourend",
+          "schema" : {
+            "type" : "integer"
+          },
+          "description" : "end timestamp"
+        }, {
+          "in" : "query",
+          "name" : "tz",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "timezone"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Proposals for the workbasket",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/proposalItems"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{OrgID}/employeeData" : {
+      "get" : {
+        "summary" : "Returns locations and working hours for the user",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "OrgID",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "The login name of the user"
+        }, {
+          "in" : "query",
+          "name" : "tourstart",
+          "schema" : {
+            "type" : "integer"
+          },
+          "description" : "start timestamp"
+        }, {
+          "in" : "query",
+          "name" : "tourend",
+          "schema" : {
+            "type" : "integer"
+          },
+          "description" : "end timestamp"
+        }, {
+          "in" : "query",
+          "name" : "tz",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "timezone"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Locations and working hours",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/employeeData"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Updates the locations and working hours for the user",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "OrgID",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "The login name of the user"
+        } ],
+        "requestBody" : {
+          "description" : "Employee data",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/employeeData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "No content"
+          }
+        }
+      }
+    },
+    "/{OrgID}/salesreps" : {
+      "get" : {
+        "summary" : "List sales reps of supervisor",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "OrgID",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "The login name of the supervisor"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The list of sales reps",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "additionalProperties" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No sales reps found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error in request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error in processing",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/applicationSettings" : {
+      "get" : {
+        "description" : "Returns application settings",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "properties" : {
+                    "addCustomerOpensMap" : {
+                      "type" : "boolean"
+                    },
+                    "centralizedPlanning" : {
+                      "type" : "boolean"
+                    },
+                    "locale" : {
+                      "type" : "string",
+                      "example" : "EN"
+                    },
+                    "prio" : {
+                      "type" : "integer"
+                    },
+                    "timeZoneStr" : {
+                      "type" : "string",
+                      "example" : "GMT"
+                    },
+                    "visitDuration" : {
+                      "type" : "integer",
+                      "example" : 1800000
+                    },
+                    "visitFrequency" : {
+                      "type" : "integer",
+                      "example" : 604800000
+                    },
+                    "visitPreperation" : {
+                      "type" : "integer",
+                      "example" : 900000
+                    },
+                    "manualPlanning" : {
+                      "type" : "boolean"
+                    },
+                    "orderByColumn" : {
+                      "type" : "string",
+                      "example" : "DAYS_OVERDUE"
+                    },
+                    "prioRed" : {
+                      "type" : "integer",
+                      "example" : 200
+                    },
+                    "prioYellow" : {
+                      "type" : "integer",
+                      "example" : 100
+                    },
+                    "tenantID" : {
+                      "type" : "string",
+                      "example" : 330751
+                    },
+                    "defaultView" : {
+                      "type" : "string",
+                      "example" : "tableView"
+                    },
+                    "calendarView" : {
+                      "type" : "boolean"
+                    },
+                    "tableView" : {
+                      "type" : "boolean",
+                      "example" : true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/optimize/byroute" : {
+      "post" : {
+        "summary" : "Optimizes the submitted workbasket into a tour",
+        "requestBody" : {
+          "description" : "The workbasket",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/optimizationData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Optimized workbasket",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/proposalItems"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error in request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error in processing",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/optimize/bytime" : {
+      "post" : {
+        "summary" : "Optimizes the submitted workbasket into a prioritized phone call list",
+        "requestBody" : {
+          "description" : "The workbasket",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/optimizationData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Optimized workbasket",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/proposalItems"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error in request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error in processing",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/save" : {
+      "post" : {
+        "summary" : "Save the optimized workbasket as visits or phone calls",
+        "requestBody" : {
+          "description" : "The optimized workbasket",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/proposalItems"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Tour saved successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/proposalItems"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error in processing",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error in processing",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uiconfig" : {
+      "get" : {
+        "summary" : "Gets the configuration data for the UI fields",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "Accept-Language",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "UI config",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{OrgID}/searchParameters" : {
+      "get" : {
+        "summary" : "Gets the search parameters template",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "Accept-Language",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "OrgID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The search parameters template",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/searchParameters"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{OrgID}/searchCustomers" : {
+      "post" : {
+        "summary" : "Searches customers according to the search parameters",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "Accept-Language",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "OrgID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The search query",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/searchQuery"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "List of found customers",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/proposalItems"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No customers found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/logData"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "logData" : {
+        "type" : "object",
+        "properties" : {
+          "logData" : {
+            "type" : "array",
+            "readOnly" : true,
+            "items" : {
+              "type" : "object"
+            }
+          }
+        }
+      },
+      "proposalItems" : {
+        "type" : "object",
+        "properties" : {
+          "proposalItems" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "mapData" : {
+            "type" : "array",
+            "readOnly" : true,
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "logData" : {
+            "type" : "array",
+            "readOnly" : true,
+            "items" : {
+              "type" : "object"
+            }
+          }
+        }
+      },
+      "employeeData" : {
+        "type" : "object",
+        "properties" : {
+          "ObjectID" : {
+            "type" : "string",
+            "example" : "00163E9F696E1EDB85D8930F3B389060"
+          },
+          "distanceUnit" : {
+            "type" : "string",
+            "example" : "km"
+          },
+          "officeAddress" : {
+            "type" : "object",
+            "properties" : {
+              "city" : {
+                "type" : "string",
+                "example" : "Hamburg"
+              },
+              "countryCode" : {
+                "type" : "string",
+                "example" : "DE"
+              },
+              "houseNumber" : {
+                "type" : "string",
+                "example" : "2"
+              },
+              "latitude" : {
+                "type" : "number",
+                "format" : "double",
+                "example" : 52.33169
+              },
+              "longitude" : {
+                "type" : "number",
+                "format" : "double",
+                "example" : 9.79451
+              },
+              "postalCode" : {
+                "type" : "string",
+                "example" : "30519"
+              },
+              "street" : {
+                "type" : "string",
+                "example" : "Heiseder Straße"
+              }
+            }
+          },
+          "privateAddress" : {
+            "type" : "object",
+            "properties" : {
+              "city" : {
+                "type" : "string",
+                "example" : "Hamburg"
+              },
+              "countryCode" : {
+                "type" : "string",
+                "example" : "DE"
+              },
+              "houseNumber" : {
+                "type" : "string",
+                "example" : "2"
+              },
+              "latitude" : {
+                "type" : "number",
+                "format" : "double",
+                "example" : 52.33169
+              },
+              "longitude" : {
+                "type" : "number",
+                "format" : "double",
+                "example" : 9.79451
+              },
+              "postalCode" : {
+                "type" : "string",
+                "example" : "30519"
+              },
+              "street" : {
+                "type" : "string",
+                "example" : "Heiseder Straße"
+              }
+            }
+          },
+          "workingHours" : {
+            "type" : "object",
+            "properties" : {
+              "overnightAllowed" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "boolean",
+                  "minimum" : 7,
+                  "maximum" : 7
+                }
+              },
+              "monday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "tuesday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "wednesday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "thursday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "friday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "saturday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              },
+              "sunday" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "string",
+                    "example" : "08:00"
+                  },
+                  "end" : {
+                    "type" : "string",
+                    "example" : "17:00"
+                  }
+                }
+              }
+            }
+          },
+          "workingTimes" : {
+            "type" : "array",
+            "readOnly" : true,
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "start" : {
+                  "type" : "integer",
+                  "example" : 1583996400000
+                },
+                "end" : {
+                  "type" : "integer",
+                  "example" : 1584028800000
+                },
+                "timeZone" : {
+                  "type" : "string",
+                  "example" : "CET"
+                }
+              }
+            }
+          }
+        }
+      },
+      "optimizationData" : {
+        "type" : "object",
+        "properties" : {
+          "proposalItems" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "routeData" : {
+            "type" : "object",
+            "properties" : {
+              "interval" : {
+                "type" : "object",
+                "properties" : {
+                  "start" : {
+                    "type" : "integer",
+                    "example" : 1583996400000
+                  },
+                  "end" : {
+                    "type" : "integer",
+                    "example" : 1584028800000
+                  },
+                  "timeZone" : {
+                    "type" : "string",
+                    "example" : "CET"
+                  }
+                }
+              },
+              "origin" : {
+                "type" : "object",
+                "properties" : {
+                  "city" : {
+                    "type" : "string",
+                    "example" : "Hamburg"
+                  },
+                  "countryCode" : {
+                    "type" : "string",
+                    "example" : "DE"
+                  },
+                  "houseNumber" : {
+                    "type" : "string",
+                    "example" : "2"
+                  },
+                  "latitude" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "example" : 52.33169
+                  },
+                  "longitude" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "example" : 9.79451
+                  },
+                  "postalCode" : {
+                    "type" : "string",
+                    "example" : "30519"
+                  },
+                  "street" : {
+                    "type" : "string",
+                    "example" : "Heiseder Straße"
+                  }
+                }
+              },
+              "destination" : {
+                "type" : "object",
+                "properties" : {
+                  "city" : {
+                    "type" : "string",
+                    "example" : "Hamburg"
+                  },
+                  "countryCode" : {
+                    "type" : "string",
+                    "example" : "DE"
+                  },
+                  "houseNumber" : {
+                    "type" : "string",
+                    "example" : "2"
+                  },
+                  "latitude" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "example" : 52.33169
+                  },
+                  "longitude" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "example" : 9.79451
+                  },
+                  "postalCode" : {
+                    "type" : "string",
+                    "example" : "30519"
+                  },
+                  "street" : {
+                    "type" : "string",
+                    "example" : "Heiseder Straße"
+                  }
+                }
+              }
+            }
+          },
+          "workingTimes" : {
+            "type" : "array",
+            "writeOnly" : true,
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "start" : {
+                  "type" : "integer",
+                  "example" : 1583996400000
+                },
+                "end" : {
+                  "type" : "integer",
+                  "example" : 1584028800000
+                },
+                "timeZone" : {
+                  "type" : "string",
+                  "example" : "CET"
+                }
+              }
+            }
+          }
+        }
+      },
+      "searchParameters" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "object",
+          "example" : {
+            "CLAST_VISITING_DATE" : {
+              "type" : "DATE",
+              "operator" : "EQ",
+              "values" : [ ]
+            }
+          }
+        }
+      },
+      "searchQuery" : {
+        "type" : "object",
+        "properties" : {
+          "searchParameters" : {
+            "type" : "object",
+            "example" : {
+              "CLAST_VISITING_DATE" : {
+                "type" : "DATE",
+                "operator" : "EQ",
+                "values" : [ ]
+              }
+            }
+          },
+          "proposalItems" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
