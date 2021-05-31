@@ -31,7 +31,7 @@ paths:
                     A: A
                     B: B
                     C: C
-  /proposals/{OrgID}:
+  /{OrgID}/proposals:
     get:
       summary: Returns the proposals for the workbasket
       parameters:
@@ -74,7 +74,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/proposalItems'
-  /employee/{OrgID}:
+  /{OrgID}/employeeData:
     get:
       summary: Returns locations and working hours for the user
       parameters:
@@ -138,7 +138,7 @@ paths:
       responses:
         "204":
           description: No content
-  /salesreps/{OrgID}:
+  /{OrgID}/salesreps:
     get:
       summary: List sales reps of supervisor
       parameters:
@@ -294,7 +294,7 @@ paths:
             application/json:
               schema:
                 type: object
-  /searchParameters/{OrgID}:
+  /{OrgID}/searchParameters:
     get:
       summary: Gets the search parameters template
       parameters:
@@ -319,7 +319,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/searchParameters'
-  /searchCustomers/{OrgID}:
+  /{OrgID}/searchCustomers:
     post:
       summary: Searches customers according to the search parameters
       parameters:
