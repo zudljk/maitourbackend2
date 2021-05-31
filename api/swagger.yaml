@@ -1,0 +1,567 @@
+openapi: 3.0.0
+info:
+  title: maiTour backend
+  version: "2.0"
+servers:
+- url: https://virtserver.swaggerhub.com/cxaddons/maitourbackend/2.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /codeLists:
+    get:
+      summary: Returns the necessary codelists
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The lists and entries
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                example:
+                  CustomerABCClassificationCode:
+                    A: A
+                    B: B
+                    C: C
+  /proposals/{OrgID}:
+    get:
+      summary: Returns the proposals for the workbasket
+      parameters:
+      - name: OrgID
+        in: path
+        description: The login name of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: tourstart
+        in: query
+        description: start timestamp
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: tourend
+        in: query
+        description: end timestamp
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: tz
+        in: query
+        description: timezone
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Proposals for the workbasket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proposalItems'
+  /employee/{OrgID}:
+    get:
+      summary: Returns locations and working hours for the user
+      parameters:
+      - name: OrgID
+        in: path
+        description: The login name of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: tourstart
+        in: query
+        description: start timestamp
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: tourend
+        in: query
+        description: end timestamp
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: tz
+        in: query
+        description: timezone
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Locations and working hours
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/employeeData'
+    post:
+      summary: Updates the locations and working hours for the user
+      parameters:
+      - name: OrgID
+        in: path
+        description: The login name of the user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Employee data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/employeeData'
+        required: true
+      responses:
+        "204":
+          description: No content
+  /salesreps/{OrgID}:
+    get:
+      summary: List sales reps of supervisor
+      parameters:
+      - name: OrgID
+        in: path
+        description: The login name of the supervisor
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The list of sales reps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties:
+                    type: string
+        "404":
+          description: No sales reps found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+        "400":
+          description: Error in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+        "500":
+          description: Error in processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+  /applicationSettings:
+    get:
+      description: Returns application settings
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+  /optimize/byroute:
+    post:
+      summary: Optimizes the submitted workbasket into a tour
+      requestBody:
+        description: The workbasket
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optimizationData'
+        required: true
+      responses:
+        "200":
+          description: Optimized workbasket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proposalItems'
+        "400":
+          description: Error in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+        "500":
+          description: Error in processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+  /optimize/bytime:
+    post:
+      summary: Optimizes the submitted workbasket into a prioritized phone call list
+      requestBody:
+        description: The workbasket
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/optimizationData'
+        required: true
+      responses:
+        "200":
+          description: Optimized workbasket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proposalItems'
+        "400":
+          description: Error in request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+        "500":
+          description: Error in processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+  /save:
+    post:
+      summary: Save the optimized workbasket as visits or phone calls
+      requestBody:
+        description: The optimized workbasket
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/proposalItems'
+        required: true
+      responses:
+        "201":
+          description: Tour saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proposalItems'
+        "400":
+          description: Error in processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+        "500":
+          description: Error in processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+  /uiconfig:
+    get:
+      summary: Gets the configuration data for the UI fields
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: UI config
+          content:
+            application/json:
+              schema:
+                type: object
+  /searchParameters/{OrgID}:
+    get:
+      summary: Gets the search parameters template
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: OrgID
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The search parameters template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchParameters'
+  /searchCustomers/{OrgID}:
+    post:
+      summary: Searches customers according to the search parameters
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: OrgID
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The search query
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchQuery'
+        required: true
+      responses:
+        "200":
+          description: List of found customers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/proposalItems'
+        "404":
+          description: No customers found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logData'
+components:
+  schemas:
+    logData:
+      type: object
+      properties:
+        logData:
+          type: array
+          readOnly: true
+          items:
+            type: object
+    proposalItems:
+      type: object
+      properties:
+        proposalItems:
+          type: array
+          items:
+            type: object
+        mapData:
+          type: array
+          readOnly: true
+          items:
+            type: object
+        logData:
+          type: array
+          readOnly: true
+          items:
+            type: object
+    employeeData:
+      type: object
+      properties:
+        ObjectID:
+          type: string
+          example: 00163E9F696E1EDB85D8930F3B389060
+        distanceUnit:
+          type: string
+          example: km
+        officeAddress:
+          $ref: '#/components/schemas/employeeData_officeAddress'
+        privateAddress:
+          $ref: '#/components/schemas/employeeData_officeAddress'
+        workingHours:
+          $ref: '#/components/schemas/employeeData_workingHours'
+        workingTimes:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/employeeData_workingTimes'
+    optimizationData:
+      type: object
+      properties:
+        proposalItems:
+          type: array
+          items:
+            type: object
+        routeData:
+          $ref: '#/components/schemas/optimizationData_routeData'
+        workingTimes:
+          type: array
+          writeOnly: true
+          items:
+            $ref: '#/components/schemas/employeeData_workingTimes'
+    searchParameters:
+      type: object
+      additionalProperties:
+        type: object
+        example:
+          CLAST_VISITING_DATE:
+            type: DATE
+            operator: EQ
+            values: []
+    searchQuery:
+      type: object
+      properties:
+        searchParameters:
+          type: object
+          example:
+            CLAST_VISITING_DATE:
+              type: DATE
+              operator: EQ
+              values: []
+        proposalItems:
+          type: array
+          items:
+            type: object
+    inline_response_200:
+      properties:
+        addCustomerOpensMap:
+          type: boolean
+        centralizedPlanning:
+          type: boolean
+        locale:
+          type: string
+          example: EN
+        prio:
+          type: integer
+        timeZoneStr:
+          type: string
+          example: GMT
+        visitDuration:
+          type: integer
+          example: 1800000
+        visitFrequency:
+          type: integer
+          example: 604800000
+        visitPreperation:
+          type: integer
+          example: 900000
+        manualPlanning:
+          type: boolean
+        orderByColumn:
+          type: string
+          example: DAYS_OVERDUE
+        prioRed:
+          type: integer
+          example: 200
+        prioYellow:
+          type: integer
+          example: 100
+        tenantID:
+          type: string
+          example: "330751"
+        defaultView:
+          type: string
+          example: tableView
+        calendarView:
+          type: boolean
+        tableView:
+          type: boolean
+          example: true
+    employeeData_officeAddress:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Hamburg
+        countryCode:
+          type: string
+          example: DE
+        houseNumber:
+          type: string
+          example: "2"
+        latitude:
+          type: number
+          format: double
+          example: 52.33169
+        longitude:
+          type: number
+          format: double
+          example: 9.79451
+        postalCode:
+          type: string
+          example: "30519"
+        street:
+          type: string
+          example: Heiseder Straße
+    employeeData_workingHours_monday:
+      type: object
+      properties:
+        start:
+          type: string
+          example: 08:00
+        end:
+          type: string
+          example: 17:00
+    employeeData_workingHours:
+      type: object
+      properties:
+        overnightAllowed:
+          type: array
+          items:
+            maximum: 7
+            minimum: 7
+            type: boolean
+        monday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        tuesday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        wednesday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        thursday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        friday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        saturday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+        sunday:
+          $ref: '#/components/schemas/employeeData_workingHours_monday'
+    employeeData_workingTimes:
+      type: object
+      properties:
+        start:
+          type: integer
+          example: 1583996400000
+        end:
+          type: integer
+          example: 1584028800000
+        timeZone:
+          type: string
+          example: CET
+    optimizationData_routeData:
+      type: object
+      properties:
+        interval:
+          $ref: '#/components/schemas/employeeData_workingTimes'
+        origin:
+          $ref: '#/components/schemas/employeeData_officeAddress'
+        destination:
+          $ref: '#/components/schemas/employeeData_officeAddress'
