@@ -8,6 +8,9 @@
   "servers" : [ {
     "description" : "SwaggerHub API Auto Mocking",
     "url" : "https://virtserver.swaggerhub.com/cxaddons/maitourbackend/2.0"
+  }, {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://maitourbackenda07d3324d-bok68z7w35.hana.ondemand.com/maiTour/rest/api/v2"
   } ],
   "paths" : {
     "/codeLists" : {
